@@ -28,11 +28,23 @@ if (Test-Path -LiteralPath $Url) {
   Write-Host '[1/4] copying local package...'
   Copy-Item -LiteralPath $Url -Destination $tmpZip -Force
 } else {
-  Write-Host '[1/4] downloading (about 300 MB, be patient)...'
-  $old = $ProgressPreference
-  $ProgressPreference = 'Continue'
-  Invoke-WebRequest -Uri $Url -OutFile $tmpZip -UseBasicParsing
-  $ProgressPreference = $old
+  Write-Host '[1/4] downloading (about 183 MB, be patient)...'
+  $curl = Get-Command curl.exe -ErrorAction SilentlyContinue
+  if ($curl) {
+    # curl streams to disk and resumes; Invoke-WebRequest buffers in memory and is much slower
+    # --ssl-no-revoke: some Windows setups fail CRL checks (CRYPT_E_NO_REVOCATION_CHECK)
+    & $curl.Source -L --fail --retry 3 --retry-delay 2 --ssl-no-revoke -o $tmpZip $Url
+    if ($LASTEXITCODE -ne 0) {
+      # non-schannel curl builds don't know that flag; retry plain
+      & $curl.Source -L --fail --retry 3 --retry-delay 2 -o $tmpZip $Url
+    }
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $tmpZip)) { throw "download failed (curl exit $LASTEXITCODE)" }
+  } else {
+    $old = $ProgressPreference
+    $ProgressPreference = 'Continue'
+    Invoke-WebRequest -Uri $Url -OutFile $tmpZip -UseBasicParsing
+    $ProgressPreference = $old
+  }
 }
 $sizeMb = [math]::Round((Get-Item $tmpZip).Length / 1MB, 1)
 Write-Host "      got $sizeMb MB"

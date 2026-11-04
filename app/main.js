@@ -579,6 +579,33 @@ function createPetWindow() {
     `scale=${d.scaleFactor}`, `请求位置=${x},${y}`, `实际位置=${JSON.stringify(petWin.getBounds())}`,
     `命中盒=${JSON.stringify(hitBox())}`);
 
+  // POKEPET_SHOWCASE=<json 路径>：按时间线演一遍，专供录屏
+  // 格式 [{"at":3000,"do":"feed","food":146},{"at":9000,"do":"follow"},...]
+  if (process.env.POKEPET_SHOWCASE) {
+    try {
+      const plan = JSON.parse(fs.readFileSync(process.env.POKEPET_SHOWCASE, 'utf8'));
+      log('演示脚本', `共 ${plan.length} 步`);
+      for (const step of plan) {
+        setTimeout(() => {
+          try {
+            if (step.do === 'feed') {
+              feedFood(FOODS.find((f) => f.id === step.food) || FOODS[0]);
+            } else if (step.do === 'follow') {
+              forceAnim(null); walkNow(0);
+            } else if (step.do === 'stopfollow') {
+              followStop();
+            } else if (step.do === 'anim') {
+              forceAnim(step.name);
+            } else if (step.do === 'stopanim') {
+              forceAnim(null);
+            }
+            log('演示', `${step.at}ms ${step.do}${step.name ? ' ' + step.name : ''}`);
+          } catch (e) { log('演示失败', String(e)); }
+        }, step.at);
+      }
+    } catch (e) { log('演示脚本读取失败', String(e)); }
+  }
+
   if (process.env.POKEPET_DEBUG) {
     setTimeout(async () => {
       if (!petWin || petWin.isDestroyed()) return;
