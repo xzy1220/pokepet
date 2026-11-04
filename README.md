@@ -132,4 +132,4 @@ tools\          构建与打包脚本
 ## 许可
 
 **代码**（`app/`、`tools/` 里的脚本）采用 [MIT](LICENSE)。
-**素材**（`app/pmd`、`app/cries`、`assets/`）遵循各自的 CC 协议，**其中 PMD SpriteCollab 是 CC BY-NC 4.0，不可商用**。
+**素材**（`app/pmd`、`app/cries`、`assets/`）遵循各自的 CC 协议，**其中 PMD SpriteCollab 是 CC BY-NC 4.0，不可商用**。详见 [NOTICE](NOTICE.md)。

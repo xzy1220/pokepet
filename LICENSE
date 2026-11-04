@@ -19,18 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-NOTE ON ASSETS / 素材不适用本许可
-
-The MIT license above covers the SOURCE CODE only (app/*.js, app/*.html,
-tools/*).
-
-Game assets are NOT covered by it:
-  - app/pmd/ , assets/card/  : PMD SpriteCollab, CC BY-NC 4.0 (non-commercial)
-  - app/cries/ , assets/pokedex.json : PokeAPI, CC BY 4.0
-  - Pokemon names and characters are trademarks of Nintendo / Game Freak /
-    The Pokemon Company. This is an unofficial fan project.
-
-Use the code freely. Do not sell it or the assets.
