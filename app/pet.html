@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>宝可梦桌宠</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 640px; height: 360px; overflow: hidden; background: transparent; }
+  body { cursor: grab; -webkit-user-select: none; user-select: none; }
+  body.grabbing { cursor: grabbing; }
+
+  #wrap { position: absolute; inset: 0; transform-origin: 50% 91.6667%; }
+
+  /* 舞台画布 640x360，脚底线在 y=330（91.6667%） */
+  #pet {
+    position: absolute; inset: 0; width: 640px; height: 360px;
+    filter: drop-shadow(0 7px 9px rgba(0, 0, 0, .16));
+  }
+
+  #shadow {
+    position: absolute; bottom: 22px; height: 14px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(0, 0, 0, .30), rgba(0, 0, 0, 0));
+    pointer-events: none;
+  }
+
+  /* 没有素材时的占位卡（PMD 动作集缺失、立绘也缺失） */
+  #card {
+    position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
+    width: 190px; height: 214px; border-radius: 22px; box-sizing: border-box;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff; border: 3px solid rgba(255, 255, 255, .78);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, .22);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .18);
+  }
+  #card[hidden] { display: none; }
+  #cardNo { font-size: 46px; font-weight: 800; letter-spacing: 1px; line-height: 1; opacity: .96; }
+  #cardName { font-size: 20px; font-weight: 700; margin-top: 10px; }
+  #cardSub { font-size: 12px; opacity: .85; margin-top: 5px; }
+</style>
+</head>
+<body>
+  <div id="wrap">
+    <canvas id="pet"></canvas>
+    <div id="card" hidden>
+      <div id="cardNo"></div>
+      <div id="cardName"></div>
+      <div id="cardSub"></div>
+    </div>
+  </div>
+  <div id="shadow"></div>
+  <script src="pet.js"></script>
+</body>
+</html>

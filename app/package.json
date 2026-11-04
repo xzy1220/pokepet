@@ -1,0 +1,8 @@
+{
+  "name": "pokepet",
+  "productName": "宝可梦桌宠",
+  "version": "0.1.0",
+  "description": "宝可梦桌宠",
+  "main": "main.js",
+  "private": true
+}

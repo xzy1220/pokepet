@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>关于</title>
+<style>
+  :root {
+    --bg: #12141a;
+    --card: #191c24;
+    --line: #262b36;
+    --text: #e8eaf0;
+    --muted: #8b93a5;
+    --gold: #ffcb05;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 13px/1.7 "Microsoft YaHei", "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    padding: 26px 28px 18px;
+    user-select: none;
+  }
+  header { display: flex; align-items: baseline; gap: 10px; }
+  h1 { font-size: 21px; margin: 0; letter-spacing: .5px; }
+  .ver { color: var(--muted); font-size: 12px; }
+  .tag { font-size: 12px; color: var(--muted); margin: 4px 0 18px; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat b { display: block; font-size: 17px; color: var(--gold); font-weight: 600; }
+  .stat span { font-size: 11px; color: var(--muted); }
+
+  .box {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .box h2 {
+    font-size: 12px;
+    margin: 0 0 6px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: .5px;
+  }
+  .box p { margin: 0; }
+  .box p + p { margin-top: 5px; }
+  .dim { color: var(--muted); }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  kbd {
+    font: 11px "Consolas", monospace;
+    background: #232833;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+  footer {
+    margin-top: auto;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--line);
+  }
+  footer .who { font-size: 12px; color: var(--muted); }
+  button {
+    font: inherit;
+    color: var(--text);
+    background: #232833;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 16px;
+    cursor: pointer;
+  }
+  button:hover { border-color: #3a4152; background: #272c38; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>宝可梦桌宠</h1>
+    <span class="ver" id="ver"></span>
+  </header>
+  <div class="tag">把 1025 只宝可梦放进 Windows 桌面</div>
+
+  <div class="stats">
+    <div class="stat"><b id="sDex">1025</b><span>图鉴</span></div>
+    <div class="stat"><b id="sPmd">987</b><span>有逐帧动作</span></div>
+    <div class="stat"><b id="sAct">17609</b><span>动作总数</span></div>
+    <div class="stat"><b id="sCry">1025</b><span>叫声</span></div>
+  </div>
+
+  <div class="box">
+    <h2>操作</h2>
+    <p>左键点一下 · 点头打招呼　　<b>拖动</b> · 换位置</p>
+    <p>右键 · 选宝可梦、喂食、动作、跟随、归位</p>
+    <p>托盘图标 · 打开选宠器；托盘菜单 · 开机自启 / 退出</p>
+  </div>
+
+  <div class="box">
+    <h2>素材来源</h2>
+    <p>动作帧：<a href="#" id="lnkPmd">PMD SpriteCollab</a>（社区同人重绘，<span class="dim">CC BY-NC 4.0</span>）</p>
+    <p>叫声 / 图鉴数据：<a href="#" id="lnkPoke">PokeAPI</a>（<span class="dim">CC BY 4.0</span>）</p>
+    <p class="dim">素材版权归各位画师与原作者；这里只是把社区素材免费用起来，不售卖、不含任何付费内容。</p>
+  </div>
+
+  <div class="box">
+    <h2>声明</h2>
+    <p>玩家自己做的同人小工具，不是官方产品，与任天堂、Game Freak、The Pokémon Company 没有关系。</p>
+    <p class="dim">Pokémon 及相关名称是各自权利人的商标；如有不妥，联系我立刻撤下。</p>
+  </div>
+
+  <footer>
+    <span class="who" id="who"></span>
+    <button id="btnClose">关闭</button>
+  </footer>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  (async () => {
+    const d = await window.info.get();
+    $('ver').textContent = 'v' + d.version;
+    $('sDex').textContent = d.dex;
+    $('sPmd').textContent = d.pmd;
+    $('sAct').textContent = d.actions;
+    $('sCry').textContent = d.cries;
+    $('who').textContent = `${d.author} · ${d.year}`;
+
+    $('lnkPmd').addEventListener('click', (e) => { e.preventDefault(); window.info.openUrl(d.urlPmd); });
+    $('lnkPoke').addEventListener('click', (e) => { e.preventDefault(); window.info.openUrl(d.urlPokeAPI); });
+    $('btnClose').addEventListener('click', () => window.info.close());
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') window.info.close(); });
+  })();
+</script>
+</body>
+</html>
