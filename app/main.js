@@ -597,6 +597,22 @@ function createPetWindow() {
 
       await shot('pet-before.png');
 
+      // POKEPET_SNAP=<png 路径>：只做一件事——强制待机，截一张带透明通道的宠物图，然后退出
+      if (process.env.POKEPET_SNAP) {
+        const out = process.env.POKEPET_SNAP;
+        try {
+          petWin.webContents.send('pet:force', 'Idle');
+        } catch { /* 渲染层可能还没就绪 */ }
+        await new Promise((r) => setTimeout(r, 1800));
+        try {
+          const img = await petWin.webContents.capturePage();
+          fs.writeFileSync(out, img.toPNG());
+          log('调试', `snap 已保存 ${out}`);
+        } catch (e) { log('snap 失败', String(e)); }
+        app.quit();
+        return;
+      }
+
       // POKEPET_DEBUG=5：按脚本切换 PMD 动作（站→坐→走→睡→醒），逐帧录下来拼成动图
       if (process.env.POKEPET_DEBUG === '5') {
         try {
@@ -968,6 +984,20 @@ function openPicker() {
   pickerWin.once('ready-to-show', () => {
     pickerWin.show();
     pickerWin.focus();
+
+    // POKEPET_SNAP_PICKER=<png 路径>：截图后退出，用来生成 README 配图
+    if (process.env.POKEPET_SNAP_PICKER) {
+      const out = process.env.POKEPET_SNAP_PICKER;
+      setTimeout(async () => {
+        try {
+          const img = await pickerWin.webContents.capturePage();
+          fs.writeFileSync(out, img.toPNG());
+          log('调试', `snap 选宠器 ${out}`);
+        } catch (e) { log('snap 选宠器失败', String(e)); }
+        app.quit();
+      }, 1500);
+      return;
+    }
     // 调试：模拟「点一下星标」，验证 收藏 → 落盘 → 重绘 整条链路
     if (process.env.POKEPET_DEBUG === '19') {
       setTimeout(async () => {

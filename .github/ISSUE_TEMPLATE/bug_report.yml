@@ -1,0 +1,56 @@
+name: Bug 报告
+description: 桌宠出问题了 / 某个宝可梦渲染不对
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        填清楚这四项，我基本能一次定位。不确定的写「不知道」也行。
+
+  - type: textarea
+    id: what
+    attributes:
+      label: 发生了什么
+      description: 你看到的现象。有截图直接拖进来。
+      placeholder: 例如「换成喷火龙之后它一直显示粉色占位卡，不显示小人」
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 怎么复现
+      placeholder: |
+        1. 右键 → 选宝可梦
+        2. 搜「喷火龙」
+        3. 点它
+        4. 桌面显示占位卡
+    validations:
+      required: true
+
+  - type: input
+    id: poke
+    attributes:
+      label: 涉及哪只宝可梦（编号或名字）
+      placeholder: "#006 喷火龙"
+    validations:
+      required: false
+
+  - type: input
+    id: env
+    attributes:
+      label: Windows 版本
+      placeholder: "Win11 23H2 / Win10 22H2"
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志（可选）
+      description: |
+        如果程序还能启动，日志在解压目录的 `resources\data\boot.log`，
+        把最后几十行贴过来。
+      render: text
+    validations:
+      required: false
